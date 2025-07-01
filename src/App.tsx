@@ -12,6 +12,7 @@ import Routines from "./pages/Routines";
 import Records from "./pages/Records";
 import Trainers from "./pages/Trainers";
 import Community from "./pages/Community";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/records" element={<Records />} />
               <Route path="/trainers" element={<Trainers />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/search" element={<Search />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

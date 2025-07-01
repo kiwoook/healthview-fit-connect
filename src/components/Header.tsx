@@ -1,12 +1,13 @@
 
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Search, User, Menu, X, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "./auth/AuthModal";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +28,9 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
 
   const handleAuthClick = (mode: 'login' | 'register') => {
@@ -37,6 +40,13 @@ export const Header = () => {
 
   const handleLogout = () => {
     logout();
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   return (
@@ -74,9 +84,27 @@ export const Header = () => {
 
             {/* 검색 및 프로필 */}
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" className="hidden sm:flex">
-                <Search className="h-4 w-4 mr-2" />
-                검색
+              {/* 검색바 */}
+              <form onSubmit={handleSearch} className="hidden sm:flex items-center">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    placeholder="검색..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 w-64"
+                  />
+                </div>
+              </form>
+              
+              {/* 모바일 검색 버튼 */}
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="sm:hidden"
+                onClick={() => navigate('/search')}
+              >
+                <Search className="h-4 w-4" />
               </Button>
               
               {user ? (
@@ -129,6 +157,21 @@ export const Header = () => {
           {/* 모바일 네비게이션 */}
           {isMenuOpen && (
             <div className="md:hidden border-t py-4">
+              {/* 모바일 검색 */}
+              <div className="px-3 pb-4">
+                <form onSubmit={handleSearch}>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="검색..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </form>
+              </div>
+              
               <nav className="flex flex-col space-y-3">
                 {navigation.map((item) => (
                   <Link
