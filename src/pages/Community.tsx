@@ -125,7 +125,7 @@ const Community = () => {
                   <Card key={post.id} className="hover:shadow-md transition-shadow">
                     <CardContent className="p-6">
                       <div className="flex items-start gap-4">
-                        <Avatar className="w-10 h-10">
+                        <Avatar className="w-10 h-10" verified={post.verified}>
                           <AvatarImage src={post.avatar} alt={post.author} />
                           <AvatarFallback>{post.author.slice(0, 2)}</AvatarFallback>
                         </Avatar>
@@ -133,11 +133,6 @@ const Community = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <span className="font-medium">{post.author}</span>
-                            {post.verified && (
-                              <Badge variant="outline" className="text-xs px-1 py-0">
-                                인증
-                              </Badge>
-                            )}
                             <Badge variant="secondary" className="text-xs">
                               {post.category}
                             </Badge>

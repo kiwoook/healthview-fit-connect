@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -152,7 +151,7 @@ export const CommunityPostDetail = ({ post, onBack }: CommunityPostDetailProps) 
       <Card>
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
-            <Avatar className="w-12 h-12">
+            <Avatar className="w-12 h-12" verified={post.verified}>
               <AvatarImage src={post.avatar} alt={post.author} />
               <AvatarFallback>{post.author.slice(0, 2)}</AvatarFallback>
             </Avatar>
@@ -160,11 +159,6 @@ export const CommunityPostDetail = ({ post, onBack }: CommunityPostDetailProps) 
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <span className="font-medium">{post.author}</span>
-                {post.verified && (
-                  <Badge variant="outline" className="text-xs px-1 py-0">
-                    인증
-                  </Badge>
-                )}
                 <Badge variant="secondary" className="text-xs">
                   {post.category}
                 </Badge>
