@@ -12,11 +12,10 @@ import { toast } from 'sonner';
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialMode?: 'login' | 'register';
 }
 
-export const AuthModal = ({ isOpen, onClose, initialMode = 'login' }: AuthModalProps) => {
-  const [mode, setMode] = useState<'login' | 'register'>(initialMode);
+export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
+  const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');

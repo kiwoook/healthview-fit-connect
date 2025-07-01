@@ -27,14 +27,12 @@ const navigation = [
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  const handleAuthClick = (mode: 'login' | 'register') => {
-    setAuthMode(mode);
+  const handleAuthClick = () => {
     setAuthModalOpen(true);
   };
 
@@ -132,14 +130,9 @@ export const Header = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm" onClick={() => handleAuthClick('login')}>
-                    로그인
-                  </Button>
-                  <Button size="sm" onClick={() => handleAuthClick('register')}>
-                    회원가입
-                  </Button>
-                </div>
+                <Button size="sm" onClick={handleAuthClick}>
+                  로그인
+                </Button>
               )}
               
               {/* 모바일 메뉴 버튼 */}
@@ -197,7 +190,6 @@ export const Header = () => {
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
-        initialMode={authMode}
       />
     </>
   );

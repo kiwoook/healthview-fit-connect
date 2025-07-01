@@ -1,12 +1,15 @@
-
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Heart, Share, Clock, TrendingUp } from "lucide-react";
+import { CommunityPostDetail } from "@/components/CommunityPostDetail";
 
 const Community = () => {
+  const [selectedPost, setSelectedPost] = useState<number | null>(null);
+
   const posts = [
     {
       id: 1,
@@ -14,7 +17,7 @@ const Community = () => {
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face",
       category: "질문",
       title: "벤치프레스 자세가 맞는지 확인해주세요",
-      content: "벤치프레스를 시작한 지 한달 정도인데, 가슴에 자극이 잘 안 오는 것 같아요. 어깨가 아픈 경우도 있고... 제 자세에 문제가 있을까요?",
+      content: "벤치프레스를 시작한 지 한달 정도인데, 가슴에 자극이 잘 안 오는 것 같아요. 어깨가 아픈 경우도 있고... 제 자세에 문제가 있을까요?\n\n특히 바벨을 내릴 때 어느 위치까지 내려야 하는지, 그리고 올릴 때 팔꿈치 각도는 어떻게 해야 하는지 궁금합니다. 유튜브 영상들을 봐도 다 다르게 말해서 혼란스러워요.",
       tags: ["초보자", "벤치프레스", "자세교정"],
       time: "2시간 전",
       likes: 12,
@@ -27,7 +30,7 @@ const Community = () => {
       avatar: "https://images.unsplash.com/photo-1494790108755-2616b332c5f0?w=50&h=50&fit=crop&crop=face",
       category: "후기",
       title: "3개월 홈트 후기 - 10kg 감량 성공!",
-      content: "코로나로 헬스장을 못 가게 되면서 홈트를 시작했는데, 꾸준히 하니까 진짜 효과가 있더라고요! 식단 조절과 함께 3개월만에 10kg 감량에 성공했습니다. 제가 한 루틴들 공유해드릴게요 :)",
+      content: "코로나로 헬스장을 못 가게 되면서 홈트를 시작했는데, 꾸준히 하니까 진짜 효과가 있더라고요! 식단 조절과 함께 3개월만에 10kg 감량에 성공했습니다.\n\n제가 한 루틴들 공유해드릴게요:\n- 월,수,금: 근력운동 (푸시업, 스쿼트, 플랭크 등)\n- 화,목,토: 유산소 (버피, 점핑잭, 마운틴 클라이머)\n- 일: 휴식\n\n식단은 탄수화물을 줄이고 단백질 위주로 먹었어요. 특히 저녁에는 닭가슴살 샐러드만 먹었습니다.",
       tags: ["홈트", "다이어트", "후기"],
       time: "5시간 전",
       likes: 87,
@@ -82,6 +85,19 @@ const Community = () => {
     { title: "크레아틴 복용법과 효과", replies: 52 }
   ];
 
+  const selectedPostData = posts.find(post => post.id === selectedPost);
+
+  if (selectedPostData) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <CommunityPostDetail 
+          post={selectedPostData} 
+          onBack={() => setSelectedPost(null)} 
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-8">
@@ -129,7 +145,10 @@ const Community = () => {
                             <span className="text-xs text-gray-500">{post.time}</span>
                           </div>
                           
-                          <h3 className="font-semibold text-lg mb-2 hover:text-blue-600 cursor-pointer">
+                          <h3 
+                            className="font-semibold text-lg mb-2 hover:text-blue-600 cursor-pointer"
+                            onClick={() => setSelectedPost(post.id)}
+                          >
                             {post.title}
                           </h3>
                           
