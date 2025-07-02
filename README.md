@@ -34,8 +34,6 @@ UI/UX: 직관적이고 반응형 디자인.
 ## 3. 배포 URL 
 https://healthview-fit-connect.lovable.app/routines
 
-_replit 로그인이 필요할 수 있습니다._
-
 ## 4. 페르소나 및 사용자 스토리
 
 ### **1. 사용자 정의 (User Definition)**
