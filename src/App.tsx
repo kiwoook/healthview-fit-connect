@@ -13,6 +13,7 @@ import Records from "./pages/Records";
 import Trainers from "./pages/Trainers";
 import Community from "./pages/Community";
 import Search from "./pages/Search";
+import CreateRoutine from "./pages/CreateRoutine";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/routines" element={<Routines />} />
+              <Route path="/routines/create" element={<CreateRoutine />} />
               <Route path="/records" element={<Records />} />
               <Route path="/trainers" element={<Trainers />} />
               <Route path="/community" element={<Community />} />

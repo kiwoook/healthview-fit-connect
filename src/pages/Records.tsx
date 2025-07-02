@@ -18,6 +18,40 @@ const Records = () => {
     streak: 7
   };
 
+  // 운동 기록이 있는 날짜들
+  const workoutDates = [
+    { date: "2024-01-15", bodyParts: ["가슴", "어깨", "삼두"], duration: 45 },
+    { date: "2024-01-13", bodyParts: ["하체", "엉덩이"], duration: 50 },
+    { date: "2024-01-11", bodyParts: ["전신"], duration: 30 },
+    { date: "2024-01-09", bodyParts: ["등", "이두"], duration:40 },
+    { date: "2024-01-07", bodyParts: ["가슴", "삼두"], duration: 35 },
+    { date: "2024-01-05", bodyParts: ["하체"], duration: 55 },
+    { date: "2024-01-03", bodyParts: ["어깨", "복부"], duration: 30 },
+  ];
+
+  // 운동 부위별 색상 매핑
+  const bodyPartColors = {
+    "가슴": "bg-red-500",
+    "어깨": "bg-orange-500", 
+    "삼두": "bg-yellow-500",
+    "하체": "bg-green-500",
+    "엉덩이": "bg-blue-500",
+    "전신": "bg-purple-500",
+    "등": "bg-indigo-500",
+    "이두": "bg-pink-500",
+    "복부": "bg-teal-500",
+    "코어": "bg-cyan-500"
+  };
+
+  // 특정 날짜에 운동 기록이 있는지 확인
+  const getWorkoutForDate = (date: Date) => {
+    const dateString = date.toISOString().split('T')[0];
+    return workoutDates.find(workout => workout.date === dateString);
+  };
+
+  // 선택된 날짜의 운동 상세 정보
+  const selectedDateWorkout = selectedDate ? getWorkoutForDate(selectedDate) : null;
+
   const monthlyProgress = [
     { week: "1주차", workouts: 3, time: 135 },
     { week: "2주차", workouts: 4, time: 180 },
@@ -129,11 +163,12 @@ const Records = () => {
             </Card>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-6">
+          <div className="grid lg:grid-cols-3 gap-6">
             {/* 캘린더 */}
             <Card>
               <CardHeader>
                 <CardTitle>운동 캘린더</CardTitle>
+                <p className="text-sm text-muted-foreground">운동한 날을 클릭하여 상세 정보를 확인하세요</p>
               </CardHeader>
               <CardContent>
                 <Calendar
@@ -141,7 +176,82 @@ const Records = () => {
                   selected={selectedDate}
                   onSelect={setSelectedDate}
                   className="rounded-md border w-full"
+                  modifiers={{
+                    workoutDay: (date) => {
+                      const dateString = date.toISOString().split('T')[0];
+                      return workoutDates.some(workout => workout.date === dateString);
+                    }
+                  }}
+                  modifiersStyles={{
+                    workoutDay: {
+                      backgroundColor: 'hsl(var(--primary))',
+                      color: 'hsl(var(--primary-foreground))',
+                      fontWeight: 'bold'
+                    }
+                  }}
                 />
+                
+                {/* 범례 */}
+                <div className="mt-4 flex items-center gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-primary"></div>
+                    <span>운동한 날</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-muted"></div>
+                    <span>운동 안한 날</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* 선택된 날짜 상세 정보 */}
+            <Card>
+              <CardHeader>
+                <CardTitle>
+                  {selectedDate ? selectedDate.toLocaleDateString('ko-KR') : '날짜를 선택하세요'}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {selectedDateWorkout ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium">{selectedDateWorkout.duration}분</span>
+                      </div>
+                      <Badge variant="outline" className="text-green-600 border-green-600">
+                        운동 완료
+                      </Badge>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">운동 부위</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedDateWorkout.bodyParts.map((part) => (
+                          <div key={part} className="flex items-center gap-2">
+                            <div className={`w-3 h-3 rounded-full ${bodyPartColors[part] || 'bg-gray-400'}`}></div>
+                            <Badge variant="secondary" className="text-xs">
+                              {part}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t">
+                      <p className="text-sm text-muted-foreground">
+                        총 {selectedDateWorkout.bodyParts.length}개 부위를 {selectedDateWorkout.duration}분간 운동했습니다.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">
+                      {selectedDate ? '이 날은 운동하지 않았습니다.' : '캘린더에서 날짜를 선택해주세요.'}
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 

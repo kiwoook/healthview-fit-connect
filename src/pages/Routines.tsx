@@ -116,8 +116,15 @@ const Routines = () => {
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">운동 루틴 찾기</h1>
-        <p className="text-gray-600">당신에게 맞는 완벽한 운동 루틴을 찾아보세요</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">운동 루틴 찾기</h1>
+            <p className="text-gray-600">당신에게 맞는 완벽한 운동 루틴을 찾아보세요</p>
+          </div>
+          <Button asChild>
+            <a href="/routines/create">나만의 루틴 만들기</a>
+          </Button>
+        </div>
       </div>
 
       {/* 검색 및 필터 */}
