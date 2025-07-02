@@ -64,16 +64,16 @@ export const Header = () => {
             </Link>
 
             {/* 데스크톱 네비게이션 */}
-            <nav className="hidden md:flex items-center space-x-6">
+            <nav className="hidden md:flex items-center space-x-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-blue-600",
+                    "px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg hover:bg-accent/50",
                     location.pathname === item.href 
-                      ? "text-blue-600" 
-                      : "text-gray-600"
+                      ? "bg-primary text-primary-foreground shadow-sm" 
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {item.name}

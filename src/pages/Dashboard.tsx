@@ -96,7 +96,7 @@ const Dashboard = () => {
             <CardTitle className="flex items-center justify-between">
               최근 운동 기록
               <Button variant="outline" size="sm" asChild>
-                <Link to="/records">전체 보기</Link>
+                <Link to="/records#workout-records">전체 보기</Link>
               </Button>
             </CardTitle>
           </CardHeader>
@@ -118,38 +118,96 @@ const Dashboard = () => {
           </CardContent>
         </Card>
 
-        {/* 추천 루틴 */}
+        {/* 팔로우한 트레이너 */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              추천 루틴
+              팔로우한 트레이너
               <Button variant="outline" size="sm" asChild>
-                <Link to="/routines">더 보기</Link>
+                <Link to="/trainers">전체 보기</Link>
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {recommendedRoutines.map((routine) => (
-                <div key={routine.id} className="flex items-center justify-between p-3 rounded-lg border hover:bg-gray-50 transition-colors">
-                  <div>
-                    <h4 className="font-medium">{routine.name}</h4>
-                    <p className="text-sm text-gray-600">{routine.trainer}</p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <span>⭐ {routine.rating}</span>
-                      <span>•</span>
-                      <span>저장 {routine.saves}회</span>
-                    </div>
+              <div className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <span className="text-blue-600 font-medium">김</span>
                   </div>
-                  <Button size="sm" variant="outline">
-                    시작하기
-                  </Button>
+                  <div>
+                    <h4 className="font-medium">김준수 트레이너</h4>
+                    <p className="text-sm text-gray-600">상체 전문</p>
+                  </div>
                 </div>
-              ))}
+                <div className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                  새 글
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                    <span className="text-purple-600 font-medium">이</span>
+                  </div>
+                  <div>
+                    <h4 className="font-medium">이미영 트레이너</h4>
+                    <p className="text-sm text-gray-600">다이어트 전문</p>
+                  </div>
+                </div>
+                <div className="text-xs text-gray-500">
+                  2일 전
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-3 rounded-lg border">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                    <span className="text-orange-600 font-medium">박</span>
+                  </div>
+                  <div>
+                    <h4 className="font-medium">박성호 트레이너</h4>
+                    <p className="text-sm text-gray-600">하체 전문</p>
+                  </div>
+                </div>
+                <div className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                  새 루틴
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* 추천 루틴 */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            추천 루틴
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/routines">더 보기</Link>
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {recommendedRoutines.map((routine) => (
+              <div key={routine.id} className="p-4 rounded-lg border hover:bg-gray-50 transition-colors">
+                <div>
+                  <h4 className="font-medium">{routine.name}</h4>
+                  <p className="text-sm text-gray-600">{routine.trainer}</p>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
+                    <span>⭐ {routine.rating}</span>
+                    <span>•</span>
+                    <span>저장 {routine.saves}회</span>
+                  </div>
+                  <Button size="sm" variant="outline" className="w-full mt-3">
+                    시작하기
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

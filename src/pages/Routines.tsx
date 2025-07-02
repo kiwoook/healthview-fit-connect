@@ -23,6 +23,7 @@ const Routines = () => {
       bodyParts: ["가슴", "어깨", "삼두"],
       level: "초급",
       duration: "30-45분",
+      weeklyFrequency: 3,
       rating: 4.8,
       saves: 1240,
       views: 15680,
@@ -37,6 +38,7 @@ const Routines = () => {
       bodyParts: ["전신"],
       level: "중급",
       duration: "20-30분",
+      weeklyFrequency: 4,
       rating: 4.9,
       saves: 890,
       views: 12340,
@@ -51,6 +53,7 @@ const Routines = () => {
       bodyParts: ["하체", "엉덩이"],
       level: "중급",
       duration: "45-60분",
+      weeklyFrequency: 2,
       rating: 4.7,
       saves: 650,
       views: 8920,
@@ -65,6 +68,7 @@ const Routines = () => {
       bodyParts: ["복부", "코어"],
       level: "초급",
       duration: "15-20분",
+      weeklyFrequency: 5,
       rating: 4.6,
       saves: 420,
       views: 5670,
@@ -79,6 +83,7 @@ const Routines = () => {
       bodyParts: ["등", "이두"],
       level: "고급",
       duration: "60분+",
+      weeklyFrequency: 2,
       rating: 4.8,
       saves: 780,
       views: 9450,
@@ -93,6 +98,7 @@ const Routines = () => {
       bodyParts: ["전신"],
       level: "초급",
       duration: "30-45분",
+      weeklyFrequency: 4,
       rating: 4.5,
       saves: 950,
       views: 11230,
@@ -239,6 +245,12 @@ const Routines = () => {
                   <Clock className="h-4 w-4" />
                   <span>{routine.duration}</span>
                 </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-blue-600 font-medium">주 {routine.weeklyFrequency}회</span>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
