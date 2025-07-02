@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { TrendingUp, Calendar, Target, Clock } from "lucide-react";
+import { TrendingUp, Calendar, Target, Clock, Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -21,6 +21,12 @@ const Dashboard = () => {
     { id: 1, name: "초보자를 위한 기본 루틴", trainer: "김준수", rating: 4.8, saves: 1240 },
     { id: 2, name: "체지방 감량 HIIT", trainer: "이미영", rating: 4.9, saves: 890 },
     { id: 3, name: "근력 증가 프로그램", trainer: "박성호", rating: 4.7, saves: 650 },
+  ];
+
+  const savedRoutines = [
+    { id: 1, name: "전신 근력 강화", trainer: "박성호", duration: "60분", difficulty: "중급" },
+    { id: 2, name: "아침 요가 스트레칭", trainer: "요가강사 제인", duration: "20분", difficulty: "초급" },
+    { id: 3, name: "코어 집중 챌린지", trainer: "김준수", duration: "30분", difficulty: "고급" },
   ];
 
   return (
@@ -176,6 +182,37 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* 저장한 루틴 */}
+      <Card className="mt-8">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Bookmark className="h-5 w-5" />
+              저장한 루틴
+            </div>
+            <Button variant="outline" size="sm" asChild>
+              <Link to="/routines?tab=saved">전체 보기</Link>
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {savedRoutines.map((routine) => (
+              <div key={routine.id} className="flex items-center justify-between p-3 rounded-lg border">
+                <div>
+                  <h4 className="font-medium">{routine.name}</h4>
+                  <p className="text-sm text-gray-600">{routine.trainer}</p>
+                  <p className="text-xs text-gray-500">{routine.duration} • {routine.difficulty}</p>
+                </div>
+                <Button size="sm" asChild>
+                  <Link to={`/routines/${routine.id}`}>시작하기</Link>
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* 추천 루틴 */}
       <Card className="mt-8">
