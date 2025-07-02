@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dumbbell } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
@@ -68,7 +69,12 @@ const Records = () => {
       duration: 45,
       bodyParts: ["가슴", "어깨", "삼두"],
       exercises: [
-        { name: "벤치프레스", sets: 3, reps: "12, 10, 8", weight: "60, 65, 70" },
+        { 
+          name: "벤치프레스",
+          sets: 8,
+          reps: "12, 10, 8, 8, 6, 6, 5, 5",
+          weight: "60, 65, 70, 70, 75, 75, 80, 80", 
+        },
         { name: "덤벨 플라이", sets: 3, reps: "15, 12, 10", weight: "15, 15, 15" },
         { name: "숄더 프레스", sets: 3, reps: "12, 10, 8", weight: "20, 22, 25" },
       ]
@@ -313,26 +319,37 @@ const Records = () => {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    {workout.exercises.map((exercise, index) => (
-                      <div key={index} className="border rounded-lg p-3">
-                        <div className="font-medium mb-2">{exercise.name}</div>
-                        <div className="grid grid-cols-3 gap-4 text-sm">
-                          <div>
-                            <span className="text-gray-600">세트: </span>
-                            <span>{exercise.sets}</span>
-                          </div>
-                          <div>
-                            <span className="text-gray-600">횟수: </span>
-                            <span>{exercise.reps}</span>
-                          </div>
-                          <div>
-                            <span className="text-gray-600">중량: </span>
-                            <span>{exercise.weight}kg</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div className="flex flex-wrap justify-center gap-3">
+                     {workout.exercises.map((exercise, index) => (
+                       <div key={index} className="bg-gray-50 rounded-lg p-3">
+                        <div className="flex flex-col items-center gap-3 text-sm">
+                           <div className="flex items-center gap-2 shrink-0">
+                             <div className="bg-blue-100 p-2 rounded-full">
+                               <Dumbbell className="w-5 h-5 text-blue-600" />
+                             </div>
+                             <div className="font-semibold text-gray-800 text-base">{exercise.name}</div>
+                           </div>
+                           <div className="flex flex-col flex-wrap content-start items-start gap-x-4 gap-y-1 max-h-[10rem]">
+                            {(() => {
+                              const repsArray = String(exercise.reps).split(', ');
+                              if (exercise.weight === '체중') {
+                                return repsArray.map((rep, setIndex) => (
+                                  <span key={setIndex} className="font-mono bg-gray-200 text-gray-800 px-2 py-1 rounded-md whitespace-nowrap">
+                                    {rep} x {exercise.weight}
+                                  </span>
+                                ));
+                              }
+                              const weightArray = String(exercise.weight).split(', ');
+                              return repsArray.map((rep, setIndex) => (
+                                <span key={setIndex} className="font-mono bg-gray-200 text-gray-800 px-2 py-1 rounded-md whitespace-nowrap">
+                                  {rep} x {weightArray[setIndex] || '0'}kg
+                                </span>
+                              ));
+                            })()}
+                           </div>
+                         </div>
+                       </div>
+                     ))}
                   </div>
                 </CardContent>
               </Card>
