@@ -1,6 +1,15 @@
 
-import { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
 import { Search, User, Menu, X, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -18,12 +27,49 @@ import {
 
 const navigation = [
   { name: "대시보드", href: "/dashboard" },
-  { name: "루틴 찾기", href: "/routines" },
-  { name: "운동 탐색", href: "/exercises" },
-  { name: "운동 기록", href: "/records" },
+  {
+    name: "루틴",
+    sub: [
+      { name: "루틴 찾기", href: "/routines" },
+      { name: "나의 루틴 만들기", href: "/routines/create" },
+    ],
+  },
+  {
+    name: "기록",
+    sub: [
+      { name: "운동 기록", href: "/records" },
+      { name: "운동 탐색", href: "/exercises" },
+    ],
+  },
   { name: "트레이너", href: "/trainers" },
   { name: "커뮤니티", href: "/community" },
 ];
+
+const ListItem = React.forwardRef<
+  React.ElementRef<typeof Link>,
+  React.ComponentPropsWithoutRef<typeof Link> & { title: string }
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  )
+})
+ListItem.displayName = "ListItem"
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -64,21 +110,49 @@ export const Header = () => {
             </Link>
 
             {/* 데스크톱 네비게이션 */}
-            <nav className="hidden md:flex items-center space-x-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={cn(
-                    "px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg hover:bg-accent/50",
-                    location.pathname === item.href 
-                      ? "bg-primary text-primary-foreground shadow-sm" 
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            {/* 데스크톱 네비게이션 */}
+            <nav className="hidden md:flex items-center">
+              <NavigationMenu>
+                <NavigationMenuList>
+                  {navigation.map((item) => (
+                    <NavigationMenuItem key={item.name}>
+                      {item.sub ? (
+                        <>
+                          <NavigationMenuTrigger
+                            className={cn(navigationMenuTriggerStyle(), "hover:bg-transparent hover:text-current", {
+                              'bg-primary text-primary-foreground': item.sub.some(sub => location.pathname.startsWith(sub.href))
+                            })}
+                          >
+                            {item.name}
+                          </NavigationMenuTrigger>
+                          <NavigationMenuContent className="bg-popover">
+                            <ul className="grid w-[400px] gap-3 p-4 md:w-[200px] lg:w-[300px]">
+                              {item.sub.map((subItem) => (
+                                <ListItem
+                                  key={subItem.name}
+                                  to={subItem.href}
+                                  title={subItem.name}
+                                />
+                              ))}
+                            </ul>
+                          </NavigationMenuContent>
+                        </>
+                      ) : (
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={item.href}
+                            className={cn(navigationMenuTriggerStyle(), "hover:bg-transparent hover:text-current", {
+                              'bg-primary text-primary-foreground': location.pathname === item.href
+                            })}
+                          >
+                            {item.name}
+                          </Link>
+                        </NavigationMenuLink>
+                      )}
+                    </NavigationMenuItem>
+                  ))}
+                </NavigationMenuList>
+              </NavigationMenu>
             </nav>
 
             {/* 검색 및 프로필 */}
