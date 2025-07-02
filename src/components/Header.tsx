@@ -19,6 +19,7 @@ import {
 const navigation = [
   { name: "대시보드", href: "/dashboard" },
   { name: "루틴 찾기", href: "/routines" },
+  { name: "운동 탐색", href: "/exercises" },
   { name: "운동 기록", href: "/records" },
   { name: "트레이너", href: "/trainers" },
   { name: "커뮤니티", href: "/community" },

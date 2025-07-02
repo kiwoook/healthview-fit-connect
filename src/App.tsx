@@ -14,6 +14,8 @@ import Trainers from "./pages/Trainers";
 import Community from "./pages/Community";
 import Search from "./pages/Search";
 import CreateRoutine from "./pages/CreateRoutine";
+import ExerciseExplore from "./pages/ExerciseExplore";
+import ExerciseDetail from "./pages/ExerciseDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +38,8 @@ const App = () => (
               <Route path="/trainers" element={<Trainers />} />
               <Route path="/community" element={<Community />} />
               <Route path="/search" element={<Search />} />
+              <Route path="/exercises" element={<ExerciseExplore />} />
+              <Route path="/exercises/:id" element={<ExerciseDetail />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
