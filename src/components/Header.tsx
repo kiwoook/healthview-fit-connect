@@ -26,7 +26,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navigation = [
-  { name: "대시보드", href: "/dashboard" },
   {
     name: "루틴",
     sub: [
@@ -110,7 +109,6 @@ export const Header = () => {
             </Link>
 
             {/* 데스크톱 네비게이션 */}
-            {/* 데스크톱 네비게이션 */}
             <nav className="hidden md:flex items-center">
               <NavigationMenu>
                 <NavigationMenuList>
@@ -156,7 +154,7 @@ export const Header = () => {
             </nav>
 
             {/* 검색 및 프로필 */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
               {/* 검색바 */}
               <form onSubmit={handleSearch} className="hidden sm:flex items-center">
                 <div className="relative">
@@ -183,24 +181,32 @@ export const Header = () => {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback>
-                          {user.name.charAt(0).toUpperCase()}
-                        </AvatarFallback>
+                        <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                       </Avatar>
-                      <span className="hidden sm:inline">{user.name}</span>
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      <User className="mr-2 h-4 w-4" />
-                      내 프로필
-                    </DropdownMenuItem>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <div className="px-2 py-1.5">
+                      <p className="font-semibold">{user.name}</p>
+                      {user.email && <p className="text-xs text-muted-foreground">{user.email}</p>}
+                    </div>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                    <DropdownMenuItem asChild>
+                      <Link to="/profile">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>내 프로필</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout} className="text-red-500 cursor-pointer focus:bg-red-50 focus:text-red-600">
                       <LogOut className="mr-2 h-4 w-4" />
-                      로그아웃
+                      <span>로그아웃</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard">
+                        <span>대시보드</span>
+                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -240,32 +246,71 @@ export const Header = () => {
                 </form>
               </div>
               
-              <nav className="flex flex-col space-y-3">
-                {navigation.map((item) => (
+              <nav className="flex flex-col space-y-1">
+                {user && (
                   <Link
-                    key={item.name}
-                    to={item.href}
+                    to="/dashboard"
                     className={cn(
-                      "text-sm font-medium px-3 py-2 rounded-md transition-colors",
-                      location.pathname === item.href
-                        ? "bg-blue-50 text-blue-600"
-                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                      "text-base font-medium px-3 py-2 rounded-md transition-colors",
+                      location.pathname === '/dashboard'
+                        ? "bg-primary/10 text-primary"
+                        : "text-foreground hover:text-primary hover:bg-primary/5"
                     )}
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {item.name}
+                    대시보드
                   </Link>
-                ))}
-              </nav>
-            </div>
-          )}
-        </div>
-      </header>
+                )}
+                {navigation.map((item) => (
+                  <Fragment key={item.name}>
+                    {item.sub ? (
+                      <div className="px-3 py-2">
+                        <h3 className="text-sm font-semibold text-gray-500">{item.name}</h3>
+                        <div className="mt-2 space-y-1">
+                          {item.sub.map((subItem) => (
+                            <Link
+                              key={subItem.name}
+                              to={subItem.href}
+                              className={cn(
+                                "block pl-4 text-sm font-medium px-3 py-2 rounded-md transition-colors",
+                                location.pathname === subItem.href
+                                  ? "bg-blue-50 text-blue-600"
+                                  : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                              )}
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              {subItem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                    <Link
+                      key={item.name}
+                      to={item.href!}
+                      className={cn(
+                        "text-sm font-medium px-3 py-2 rounded-md transition-colors",
+                        location.pathname === item.href
+                          ? "bg-blue-50 text-blue-600"
+                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+                      )}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </Fragment>
+              ))}
+            </nav>
+          </div>
+        )}
+      </div>
+    </header>
 
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-      />
-    </>
-  );
+    <AuthModal
+      isOpen={authModalOpen}
+      onClose={() => setAuthModalOpen(false)}
+    />
+  </>
+);
 };
