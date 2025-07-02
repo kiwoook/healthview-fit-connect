@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageCircle, Heart, Share, Clock, TrendingUp, Plus, Edit3 } from "lucide-react";
+import { MessageCircle, Heart, Share, Clock, TrendingUp, Plus, Edit3, Image as ImageIcon, X as XIcon } from "lucide-react";
 import { CommunityPostDetail } from "@/components/CommunityPostDetail";
 import { toast } from "@/hooks/use-toast";
 
@@ -23,6 +23,8 @@ const Community = () => {
     category: "질문"
   });
   const [quickPost, setQuickPost] = useState("");
+  const [quickPostImage, setQuickPostImage] = useState<File | null>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const posts = [
     {
@@ -85,6 +87,7 @@ const Community = () => {
       category: "잡담",
       title: "",
       content: "오늘 하체 운동 완료! 스쿼트 5세트 데드리프트 4세트 🔥 내일은 상체 ㄱㄱ #오운완 #하체데이",
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=600&fit=crop",
       tags: ["오운완", "하체"],
       time: "30분 전",
       likes: 5,
@@ -183,6 +186,7 @@ const Community = () => {
     });
 
     setQuickPost("");
+    setQuickPostImage(null);
     setIsQuickPostDialogOpen(false);
   };
 
@@ -238,13 +242,45 @@ const Community = () => {
                           onChange={(e) => setQuickPost(e.target.value)}
                           rows={4}
                         />
-                        <div className="flex justify-end gap-2">
-                          <Button variant="outline" onClick={() => setIsQuickPostDialogOpen(false)}>
-                            취소
+                        {quickPostImage && (
+                          <div className="relative mt-2">
+                            <img src={URL.createObjectURL(quickPostImage)} alt="미리보기" className="max-h-60 w-full object-contain rounded-md border" />
+                            <Button
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-2 right-2 h-6 w-6 rounded-full"
+                              onClick={() => setQuickPostImage(null)}
+                            >
+                              <XIcon className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                        <div className="flex justify-between items-center mt-2">
+                          <Button variant="ghost" size="icon" onClick={() => imageInputRef.current?.click()}>
+                            <ImageIcon className="h-5 w-5 text-gray-500" />
                           </Button>
-                          <Button onClick={handleQuickPost}>
-                            공유하기
-                          </Button>
+                          <input
+                            type="file"
+                            ref={imageInputRef}
+                            className="hidden"
+                            accept="image/*"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setQuickPostImage(e.target.files[0]);
+                              }
+                            }}
+                          />
+                          <div className="flex gap-2">
+                            <Button variant="outline" onClick={() => {
+                              setIsQuickPostDialogOpen(false);
+                              setQuickPostImage(null);
+                            }}>
+                              취소
+                            </Button>
+                            <Button onClick={handleQuickPost}>
+                              공유하기
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </DialogContent>
@@ -338,6 +374,12 @@ const Community = () => {
                           <p className={`text-gray-600 mb-3 ${post.isQuickPost ? 'text-base' : 'line-clamp-2'}`}>
                             {post.content}
                           </p>
+
+                          {post.image && (
+                            <div className="mb-3 rounded-lg overflow-hidden border cursor-pointer" onClick={() => setSelectedPost(post.id)}>
+                              <img src={post.image} alt="게시글 이미지" className="w-full h-auto object-cover" />
+                            </div>
+                          )}
                           
                           <div className="flex flex-wrap gap-1 mb-3">
                             {post.tags.map((tag) => (
@@ -403,6 +445,12 @@ const Community = () => {
                           <p className={`text-gray-600 mb-3 ${post.isQuickPost ? 'text-base' : 'line-clamp-2'}`}>
                             {post.content}
                           </p>
+
+                          {post.image && (
+                            <div className="mb-3 rounded-lg overflow-hidden border cursor-pointer" onClick={() => setSelectedPost(post.id)}>
+                              <img src={post.image} alt="게시글 이미지" className="w-full h-auto object-cover" />
+                            </div>
+                          )}
                           
                           <div className="flex flex-wrap gap-1 mb-3">
                             {post.tags.map((tag) => (
