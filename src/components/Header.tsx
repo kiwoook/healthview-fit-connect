@@ -11,7 +11,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import { Search, User, Menu, X, LogOut, ChevronDown } from "lucide-react";
+import { Search, User, Menu, X, LogOut, ChevronDown, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthModal } from "./auth/AuthModal";
@@ -79,6 +79,21 @@ export const Header = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'comment', text: '홍길동님이 회원님의 게시글에 댓글을 남겼습니다.', time: '5분 전', read: false },
+    { id: 2, type: 'follow', text: '운동매니아님이 회원님을 팔로우하기 시작했습니다.', time: '1시간 전', read: false },
+    { id: 3, type: 'routine', text: "관심 등록한 '3대 500챌린지' 루틴이 업데이트되었습니다.", time: '3시간 전', read: false },
+    { id: 4, type: 'reminder', text: '오늘은 가슴 운동하는 날입니다! 잊지 마세요.', time: '1일 전', read: true },
+    { id: 5, type: 'trainer', text: "팔로우 중인 '김코치' 트레이너가 새 글을 작성했습니다.", time: '2일 전', read: true },
+    { id: 6, type: 'warning', text: '최근 2주간 운동 기록이 없네요. 다시 시작해볼까요?', time: '3일 전', read: true },
+  ]);
+
+  const handleNotificationClick = (id: number) => {
+    setNotifications(
+      notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
+    );
+  };
+
   const handleAuthClick = () => {
     setAuthModalOpen(true);
   };
@@ -93,6 +108,8 @@ export const Header = () => {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
+
+  const hasUnread = notifications.some(n => !n.read);
 
   return (
     <>
@@ -118,6 +135,7 @@ export const Header = () => {
                       {item.sub ? (
                         <>
                           <NavigationMenuTrigger
+                            onClick={() => navigate(item.sub[0].href)}
                             className={cn(navigationMenuTriggerStyle(), "hover:bg-transparent hover:text-current", {
                               'bg-primary text-primary-foreground': item.sub.some(sub => location.pathname.startsWith(sub.href))
                             })}
@@ -139,7 +157,7 @@ export const Header = () => {
                       ) : (
                         <NavigationMenuLink asChild>
                           <Link
-                            to={item.href}
+                            to={item.href!}
                             className={cn(navigationMenuTriggerStyle(), "hover:bg-transparent hover:text-current", {
                               'bg-primary text-primary-foreground': location.pathname === item.href
                             })}
@@ -180,19 +198,55 @@ export const Header = () => {
               </Button>
               
               {user ? (
-                <div className="flex items-center space-x-1">
-                  <Link to="/dashboard">
-                    <Avatar className="h-8 w-8 cursor-pointer">
-                      <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                  </Link>
-                  <div
-                    onMouseEnter={() => setIsProfileMenuOpen(true)}
-                    onMouseLeave={() => setIsProfileMenuOpen(false)}
-                  >
-                    <DropdownMenu open={isProfileMenuOpen} onOpenChange={setIsProfileMenuOpen}>
+                <div className="flex items-center space-x-2">
+                  {/* 알림 드롭다운 */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="relative h-9 w-9 rounded-full p-0">
+                        <Bell className="h-5 w-5" />
+                        {hasUnread && (
+                          <span className="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                          </span>
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-80 md:w-96">
+                      <div className="p-2 font-semibold">알림</div>
+                      <DropdownMenuSeparator />
+                      <div className="max-h-96 overflow-y-auto">
+                        {notifications.map((notification) => (
+                          <DropdownMenuItem
+                            key={notification.id}
+                            className={cn(
+                              "flex flex-col items-start gap-1 p-2 cursor-pointer",
+                              !notification.read && "bg-blue-50/50"
+                            )}
+                            onClick={() => handleNotificationClick(notification.id)}
+                          >
+                            <p className="text-sm whitespace-normal">{notification.text}</p>
+                            <p className="text-xs text-muted-foreground">{notification.time}</p>
+                          </DropdownMenuItem>
+                        ))}
+                      </div>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="justify-center cursor-pointer focus:bg-accent">
+                        <span>모든 알림 보기</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+
+                  {/* 프로필 드롭다운 */}
+                  <div className="flex items-center">
+                    <Link to="/dashboard">
+                      <Avatar className="h-9 w-9 cursor-pointer">
+                        <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                    </Link>
+                    <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0">
+                        <Button variant="ghost" size="sm" className="h-9 w-9 rounded-full p-0">
                           <ChevronDown className="h-5 w-5" />
                         </Button>
                       </DropdownMenuTrigger>
@@ -271,7 +325,9 @@ export const Header = () => {
                   <Fragment key={item.name}>
                     {item.sub ? (
                       <div className="px-3 py-2">
-                        <h3 className="text-sm font-semibold text-gray-500">{item.name}</h3>
+                        <Link to={item.sub[0].href} onClick={() => setIsMenuOpen(false)}>
+                          <h3 className="text-sm font-semibold text-gray-500 hover:text-primary">{item.name}</h3>
+                        </Link>
                         <div className="mt-2 space-y-1">
                           {item.sub.map((subItem) => (
                             <Link
