@@ -27,19 +27,14 @@ import {
 
 const navigation = [
   {
-    name: "루틴",
+    name: "운동하기",
     sub: [
-      { name: "루틴 찾기", href: "/routines" },
-      { name: "나의 루틴 만들기", href: "/routines/create" },
+      { name: "루틴 찾기", href: "/workout/routines" },
+      { name: "운동 탐색", href: "/workout/exercises" },
+      { name: "나의 루틴 만들기", href: "/workout/create-routine" },
     ],
   },
-  {
-    name: "기록",
-    sub: [
-      { name: "운동 기록", href: "/records" },
-      { name: "운동 탐색", href: "/exercises" },
-    ],
-  },
+  { name: "운동 기록", href: "/records" },
   { name: "트레이너", href: "/trainers" },
   { name: "커뮤니티", href: "/community" },
   { name: "숏츠", href: "/shorts" },
@@ -144,7 +139,7 @@ export const Header = () => {
                             {item.name}
                           </NavigationMenuTrigger>
                           <NavigationMenuContent className="bg-popover">
-                            <ul className="grid w-[400px] gap-3 p-4 md:w-[200px] lg:w-[300px]">
+                            <ul className="grid w-[250px] gap-3 p-4">
                               {item.sub.map((subItem) => (
                                 <ListItem
                                   key={subItem.name}
@@ -192,7 +187,7 @@ export const Header = () => {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="sm:hidden"
+                className="md:hidden"
                 onClick={() => navigate('/search')}
               >
                 <Search className="h-4 w-4" />
@@ -277,103 +272,78 @@ export const Header = () => {
                 </Button>
               )}
               
-              {/* 모바일 메뉴 버튼 */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="md:hidden"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+              {/* Hamburger Menu Button */}
+              <div className="md:hidden">
+                <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(true)}>
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </div>
+            </div>  
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Navigation Menu */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] bg-white md:hidden animate-in slide-in-from-bottom-24 duration-300">
+          <div className="container mx-auto px-4 pt-5 pb-8">
+            <div className="flex justify-between items-center">
+              <Link to="/" className="flex items-center space-x-2" onClick={() => setIsMenuOpen(false)}>
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">HV</span>
+                </div>
+                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  HealthView
+                </span>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(false)}>
+                <X className="h-6 w-6" />
               </Button>
             </div>
-          </div>
-
-          {/* 모바일 네비게이션 */}
-          {isMenuOpen && (
-            <div className="md:hidden border-t py-4">
-              {/* 모바일 검색 */}
-              <div className="px-3 pb-4">
-                <form onSubmit={handleSearch}>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                    <Input
-                      placeholder="검색..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                </form>
-              </div>
-              
-              <nav className="flex flex-col space-y-1">
-                {user && (
-                  <Link
-                    to="/dashboard"
-                    className={cn(
-                      "text-base font-medium px-3 py-2 rounded-md transition-colors",
-                      location.pathname === '/dashboard'
-                        ? "bg-primary/10 text-primary"
-                        : "text-foreground hover:text-primary hover:bg-primary/5"
-                    )}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    대시보드
-                  </Link>
-                )}
-                {navigation.map((item) => (
-                  <Fragment key={item.name}>
-                    {item.sub ? (
-                      <div className="px-3 py-2">
-                        <Link to={item.sub[0].href} onClick={() => setIsMenuOpen(false)}>
-                          <h3 className="text-sm font-semibold text-gray-500 hover:text-primary">{item.name}</h3>
-                        </Link>
-                        <div className="mt-2 space-y-1">
-                          {item.sub.map((subItem) => (
-                            <Link
-                              key={subItem.name}
-                              to={subItem.href}
-                              className={cn(
-                                "block pl-4 text-sm font-medium px-3 py-2 rounded-md transition-colors",
-                                location.pathname === subItem.href
-                                  ? "bg-blue-50 text-blue-600"
-                                  : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                              )}
-                              onClick={() => setIsMenuOpen(false)}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
-                        </div>
+            <nav className="mt-8 flex flex-col">
+              {navigation.map((item) => (
+                <div key={item.name} className="py-2 border-b border-gray-100 last:border-b-0">
+                  {item.sub ? (
+                    <>
+                      <span className="px-4 py-2 flex items-center justify-between text-lg font-semibold text-gray-800">{item.name} <ChevronDown className="h-5 w-5 text-gray-400"/></span>
+                      <div className="flex flex-col mt-2 space-y-1 pl-4">
+                        {item.sub.map((subItem) => (
+                          <Link
+                            key={subItem.name}
+                            to={subItem.href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={cn("block rounded-md p-3 text-base font-medium text-gray-600 hover:bg-gray-100", {
+                              'bg-blue-50 text-blue-700': location.pathname.startsWith(subItem.href)
+                            })}
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
                       </div>
-                    ) : (
+                    </>
+                  ) : (
                     <Link
                       key={item.name}
                       to={item.href!}
-                      className={cn(
-                        "text-sm font-medium px-3 py-2 rounded-md transition-colors",
-                        location.pathname === item.href
-                          ? "bg-blue-50 text-blue-600"
-                          : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-                      )}
                       onClick={() => setIsMenuOpen(false)}
+                      className={cn("block rounded-md px-4 py-3 text-lg font-medium text-gray-800 hover:bg-gray-100", {
+                        'bg-blue-50 text-blue-700': location.pathname === item.href
+                      })}
                     >
                       {item.name}
                     </Link>
                   )}
-                </Fragment>
+                </div>
               ))}
             </nav>
           </div>
-        )}
-      </div>
-    </header>
+        </div>
+      )}
 
-    <AuthModal
-      isOpen={authModalOpen}
-      onClose={() => setAuthModalOpen(false)}
-    />
-  </>
-);
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+      />
+    </>
+  );
 };

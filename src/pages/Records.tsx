@@ -29,21 +29,60 @@ const Records = () => {
     { date: "2024-01-07", bodyParts: ["가슴", "삼두"], duration: 35 },
     { date: "2024-01-05", bodyParts: ["하체"], duration: 55 },
     { date: "2024-01-03", bodyParts: ["어깨", "복부"], duration: 30 },
+    { date: "2024-01-17", bodyParts: ["등"], duration: 45 },
+    { date: "2024-01-19", bodyParts: ["하체"], duration: 60 },
+    { date: "2024-01-21", bodyParts: ["가슴", "어깨"], duration: 50 },
+    { date: "2024-01-22", bodyParts: ["팔"], duration: 35 },
+    { date: "2024-01-24", bodyParts: ["어깨"], duration: 40 },
+    { date: "2024-01-26", bodyParts: ["전신"], duration: 55 },
+    { date: "2024-01-28", bodyParts: ["하체"], duration: 65 },
+    { date: "2024-01-30", bodyParts: ["등", "이두"], duration: 50 },
   ];
 
-  // 운동 부위별 색상 매핑
-  const bodyPartColors = {
-    "가슴": "bg-red-500",
-    "어깨": "bg-orange-500", 
-    "삼두": "bg-yellow-500",
-    "하체": "bg-green-500",
-    "엉덩이": "bg-blue-500",
-    "전신": "bg-purple-500",
-    "등": "bg-indigo-500",
-    "이두": "bg-pink-500",
-    "복부": "bg-teal-500",
-    "코어": "bg-cyan-500"
+  // 운동 부위 및 색상 설정
+  const bodyPartConfig: Record<string, { key: string; name: string; style: React.CSSProperties }> = {
+    "가슴": { key: "chest", name: "가슴", style: { backgroundColor: 'hsl(var(--workout-chest))', color: 'hsl(var(--workout-chest-foreground))' } },
+    "등": { key: "back", name: "등", style: { backgroundColor: 'hsl(var(--workout-back))', color: 'hsl(var(--workout-back-foreground))' } },
+    "하체": { key: "legs", name: "하체", style: { backgroundColor: 'hsl(var(--workout-legs))', color: 'hsl(var(--workout-legs-foreground))' } },
+    "어깨": { key: "shoulders", name: "어깨", style: { backgroundColor: 'hsl(var(--workout-shoulders))', color: 'hsl(var(--workout-shoulders-foreground))' } },
+    "팔": { key: "arms", name: "팔", style: { backgroundColor: 'hsl(var(--workout-arms))', color: 'hsl(var(--workout-arms-foreground))' } },
+    "전신": { key: "fullbody", name: "전신", style: { backgroundColor: 'hsl(var(--workout-fullbody))', color: 'hsl(var(--workout-fullbody-foreground))' } },
   };
+
+  // 데이터에 있는 다른 부위 이름들을 대표 부위로 매핑
+  const bodyPartAliases: Record<string, keyof typeof bodyPartConfig> = {
+    "이두": "팔",
+    "삼두": "팔",
+    "엉덩이": "하체",
+    "복부": "전신",
+    "코어": "전신",
+  };
+
+  // 캘린더에 표시할 날짜별 운동 부위 데이터 가공
+  const workoutByDate = workoutDates.reduce((acc, workout) => {
+    if (workout.bodyParts.length > 0) {
+      const primaryPart = workout.bodyParts[0];
+      const mappedPart = bodyPartAliases[primaryPart] || primaryPart;
+      if (bodyPartConfig[mappedPart]) {
+        acc[workout.date] = bodyPartConfig[mappedPart].key;
+      }
+    }
+    return acc;
+  }, {} as Record<string, string>);
+
+  // 캘린더에 적용할 동적 modifiers와 styles 생성
+  const modifiers = Object.values(bodyPartConfig).reduce((acc, { key }) => {
+    acc[key] = (date: Date) => {
+      const dateString = date.toISOString().split('T')[0];
+      return workoutByDate[dateString] === key;
+    };
+    return acc;
+  }, {} as Record<string, (date: Date) => boolean>);
+
+  const modifiersStyles = Object.values(bodyPartConfig).reduce((acc, { key, style }) => {
+    acc[key] = { ...style, fontWeight: 'bold' };
+    return acc;
+  }, {} as Record<string, React.CSSProperties>);
 
   // 특정 날짜에 운동 기록이 있는지 확인
   const getWorkoutForDate = (date: Date) => {
@@ -359,30 +398,21 @@ const Records = () => {
                   selected={selectedDate}
                   onSelect={setSelectedDate}
                   className="rounded-md border w-full"
-                  modifiers={{
-                    workoutDay: (date) => {
-                      const dateString = date.toISOString().split('T')[0];
-                      return workoutDates.some(workout => workout.date === dateString);
-                    }
-                  }}
-                  modifiersStyles={{
-                    workoutDay: {
-                      backgroundColor: 'hsl(var(--primary))',
-                      color: 'hsl(var(--primary-foreground))',
-                      fontWeight: 'bold'
-                    }
-                  }}
+                  modifiers={modifiers}
+                  modifiersStyles={modifiersStyles}
                 />
                 
                 {/* 범례 */}
-                <div className="mt-4 flex items-center gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-primary"></div>
-                    <span>운동한 날</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-muted"></div>
-                    <span>운동 안한 날</span>
+                <div className="mt-4 space-y-2 text-sm">
+                  <p className="font-semibold">운동 부위 범례</p>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                    {Object.values(bodyPartConfig).map(({ key, name, style }) => (
+                      <div key={key} className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full" style={{ backgroundColor: style.backgroundColor as string }}></span>
+                        <span>{name}</span>
+                      </div>
+                    ))}
+
                   </div>
                 </div>
               </CardContent>
@@ -413,7 +443,12 @@ const Records = () => {
                       <div className="flex flex-wrap gap-2">
                         {selectedDateWorkout.bodyParts.map((part) => (
                           <div key={part} className="flex items-center gap-2">
-                            <div className={`w-3 h-3 rounded-full ${bodyPartColors[part] || 'bg-gray-400'}`}></div>
+                            <div 
+                              className="w-3 h-3 rounded-full"
+                              style={{
+                                backgroundColor: bodyPartConfig[bodyPartAliases[part] || part]?.style.backgroundColor || 'hsl(var(--muted))'
+                              }}
+                            ></div>
                             <Badge variant="secondary" className="text-xs">
                               {part}
                             </Badge>

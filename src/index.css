@@ -49,6 +49,20 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    --workout-chest: 205 90% 92%;
+    --workout-chest-foreground: 205 90% 25%;
+    --workout-back: 145 75% 92%;
+    --workout-back-foreground: 145 75% 25%;
+    --workout-legs: 35 95% 92%;
+    --workout-legs-foreground: 35 95% 25%;
+    --workout-shoulders: 260 95% 92%;
+    --workout-shoulders-foreground: 260 95% 25%;
+    --workout-arms: 350 95% 92%;
+    --workout-arms-foreground: 350 95% 25%;
+    --workout-fullbody: 170 85% 92%;
+    --workout-fullbody-foreground: 170 85% 25%;
+
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -95,6 +109,19 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --workout-chest: 205 90% 15%;
+    --workout-chest-foreground: 205 90% 88%;
+    --workout-back: 145 75% 15%;
+    --workout-back-foreground: 145 75% 88%;
+    --workout-legs: 35 95% 15%;
+    --workout-legs-foreground: 35 95% 88%;
+    --workout-shoulders: 260 95% 15%;
+    --workout-shoulders-foreground: 260 95% 88%;
+    --workout-arms: 350 95% 15%;
+    --workout-arms-foreground: 350 95% 88%;
+    --workout-fullbody: 170 85% 15%;
+    --workout-fullbody-foreground: 170 85% 88%;
   }
 }
 

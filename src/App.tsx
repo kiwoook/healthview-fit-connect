@@ -34,15 +34,15 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/routines" element={<Routines />} />
-              <Route path="/routines/create" element={<CreateRoutine />} />
+              <Route path="/workout/routines" element={<Routines />} />
+              <Route path="/workout/create-routine" element={<CreateRoutine />} />
               <Route path="/records" element={<Records />} />
               <Route path="/trainers" element={<Trainers />} />
               <Route path="/community" element={<Community />} />
               <Route path="/shorts" element={<Shorts />} />
               <Route path="/search" element={<Search />} />
-              <Route path="/exercises" element={<ExerciseExplore />} />
-              <Route path="/exercises/:id" element={<ExerciseDetail />} />
+              <Route path="/workout/exercises" element={<ExerciseExplore />} />
+              <Route path="/workout/exercises/:id" element={<ExerciseDetail />} />
               <Route path="/fitness-assessment" element={<FitnessOnboarding />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
