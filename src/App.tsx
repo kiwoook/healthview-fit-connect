@@ -16,6 +16,7 @@ import Search from "./pages/Search";
 import CreateRoutine from "./pages/CreateRoutine";
 import ExerciseExplore from "./pages/ExerciseExplore";
 import ExerciseDetail from "./pages/ExerciseDetail";
+import FitnessOnboarding from "./pages/FitnessOnboarding";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
               <Route path="/search" element={<Search />} />
               <Route path="/exercises" element={<ExerciseExplore />} />
               <Route path="/exercises/:id" element={<ExerciseDetail />} />
+              <Route path="/fitness-assessment" element={<FitnessOnboarding />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

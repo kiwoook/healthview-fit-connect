@@ -8,6 +8,12 @@ interface User {
   exerciseLevel: 'beginner' | 'intermediate' | 'advanced';
   location: string;
   createdAt: string;
+  fitnessAssessment?: {
+    completed: boolean;
+    results?: Record<string, string>;
+    personalityType?: string;
+    completedAt?: string;
+  };
 }
 
 interface AuthContextType {
@@ -16,6 +22,7 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
+  updateFitnessAssessment: (results: Record<string, string>, personalityType: string) => void;
 }
 
 interface RegisterData {
@@ -110,8 +117,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem('healthview_user');
   };
 
+  const updateFitnessAssessment = (results: Record<string, string>, personalityType: string) => {
+    if (!user) return;
+
+    const updatedUser = {
+      ...user,
+      fitnessAssessment: {
+        completed: true,
+        results,
+        personalityType,
+        completedAt: new Date().toISOString(),
+      }
+    };
+
+    setUser(updatedUser);
+    localStorage.setItem('healthview_user', JSON.stringify(updatedUser));
+
+    // 사용자 목록도 업데이트
+    const savedUsers = JSON.parse(localStorage.getItem('healthview_users') || '[]');
+    const updatedUsers = savedUsers.map((u: any) => 
+      u.id === user.id ? { ...u, fitnessAssessment: updatedUser.fitnessAssessment } : u
+    );
+    localStorage.setItem('healthview_users', JSON.stringify(updatedUsers));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, isLoading, updateFitnessAssessment }}>
       {children}
     </AuthContext.Provider>
   );

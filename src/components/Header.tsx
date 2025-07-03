@@ -117,7 +117,7 @@ export const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* 로고 */}
-            <Link to={user ? "/dashboard" : "/"} className="flex items-center space-x-2">
+            <Link to={user ? (user.fitnessAssessment?.completed ? "/dashboard" : "/fitness-assessment") : "/"} className="flex items-center space-x-2">
               <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
                 <span className="text-white font-bold text-sm">HV</span>
               </div>

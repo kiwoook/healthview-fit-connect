@@ -23,7 +23,7 @@ const Index = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-                <Link to="/dashboard">
+                <Link to="/fitness-assessment">
                   시작하기 <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -100,7 +100,7 @@ const Index = () => {
             수천 명의 사용자들이 이미 HealthView와 함께 건강한 변화를 만들고 있습니다
           </p>
           <Button size="lg" variant="secondary" asChild>
-            <Link to="/dashboard">
+            <Link to="/fitness-assessment">
               무료로 시작하기 <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
