@@ -42,6 +42,7 @@ const navigation = [
   },
   { name: "트레이너", href: "/trainers" },
   { name: "커뮤니티", href: "/community" },
+  { name: "숏츠", href: "/shorts" },
 ];
 
 const ListItem = React.forwardRef<

@@ -12,6 +12,7 @@ import Routines from "./pages/Routines";
 import Records from "./pages/Records";
 import Trainers from "./pages/Trainers";
 import Community from "./pages/Community";
+import Shorts from "./pages/Shorts";
 import Search from "./pages/Search";
 import CreateRoutine from "./pages/CreateRoutine";
 import ExerciseExplore from "./pages/ExerciseExplore";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/records" element={<Records />} />
               <Route path="/trainers" element={<Trainers />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/shorts" element={<Shorts />} />
               <Route path="/search" element={<Search />} />
               <Route path="/exercises" element={<ExerciseExplore />} />
               <Route path="/exercises/:id" element={<ExerciseDetail />} />

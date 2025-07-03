@@ -2,10 +2,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { TrendingUp, Calendar, Target, Clock, Bookmark } from "lucide-react";
+import { TrendingUp, Calendar, Target, Clock, Bookmark, Award, Flame, Star, Users, Search } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
+  // 뱃지 더미 데이터
+  const badges = [
+    { id: 1, name: "첫 걸음", icon: <Award size={28} />, description: "첫 운동을 완료하여 획득", earned: true },
+    { id: 2, name: "꾸준함의 상징", icon: <Flame size={28} />, description: "7일 연속 운동하여 획득", earned: true },
+    { id: 3, name: "루틴 마스터", icon: <Star size={28} />, description: "나만의 루틴을 생성하여 획득", earned: false },
+    { id: 4, name: "커뮤니티 스타", icon: <Users size={28} />, description: "커뮤니티에 첫 글 작성 시 획득", earned: false },
+    { id: 5, name: "탐험가", icon: <Search size={28} />, description: "10개 이상의 운동을 탐색하여 획득", earned: true },
+  ];
+
   // 더미 데이터
   const weeklyProgress = 75;
   const monthlyGoal = 20;
@@ -94,6 +104,42 @@ const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* 뱃지 섹션 */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>나의 뱃지</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-x-8 gap-y-6">
+            {badges.map((badge) => (
+              <Tooltip key={badge.id}>
+                <TooltipTrigger asChild>
+                  <div className="flex flex-col items-center w-20 text-center cursor-pointer">
+                    <div
+                      className={`relative w-16 h-16 flex items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                        badge.earned
+                          ? "border-yellow-400 bg-yellow-50 text-yellow-500"
+                          : "border-gray-200 bg-gray-50 text-gray-400"
+                      }`}>
+                      {badge.icon}
+                      {!badge.earned && (
+                        <div className="absolute inset-0 bg-white/70 rounded-full" />
+                      )}
+                    </div>
+                    <p className={`mt-2 text-sm font-semibold ${badge.earned ? 'text-gray-800' : 'text-gray-400'}`}>
+                      {badge.name}
+                    </p>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{badge.description}</p>
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="grid lg:grid-cols-2 gap-8">
         {/* 최근 운동 기록 */}
