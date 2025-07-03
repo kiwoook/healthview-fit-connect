@@ -7,6 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, TrendingUp, Clock, Target } from "lucide-react";
+import { AIRoutineAnalysis } from "@/components/AIRoutineAnalysis";
 
 const Records = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -60,6 +61,156 @@ const Records = () => {
     { week: "4주차", workouts: 4, time: 200 },
   ];
 
+  // AI 분석을 위한 운동 데이터 변환
+  const workoutDataForAnalysis = [
+    {
+      date: "2024-01-15",
+      exercises: [
+        {
+          name: "벤치프레스",
+          sets: [
+            { reps: 12, weight: 60 }, { reps: 10, weight: 65 }, { reps: 8, weight: 70 }, { reps: 8, weight: 70 },
+            { reps: 6, weight: 75 }, { reps: 6, weight: 75 }, { reps: 5, weight: 80 }, { reps: 5, weight: 80 }
+          ],
+          targetMuscles: ["가슴", "어깨", "삼두"]
+        },
+        {
+          name: "덤벨 플라이",
+          sets: [
+            { reps: 15, weight: 15 }, { reps: 12, weight: 15 }, { reps: 10, weight: 15 }
+          ],
+          targetMuscles: ["가슴"]
+        },
+        {
+          name: "숄더 프레스",
+          sets: [
+            { reps: 12, weight: 20 }, { reps: 10, weight: 22 }, { reps: 8, weight: 25 }
+          ],
+          targetMuscles: ["어깨"]
+        }
+      ],
+      duration: 45,
+      difficulty: 'moderate' as const,
+      fatigue: 6
+    },
+    {
+      date: "2024-01-13",
+      exercises: [
+        {
+          name: "스쿼트",
+          sets: [
+            { reps: 15, weight: 70 }, { reps: 12, weight: 80 }, { reps: 10, weight: 90 }, { reps: 8, weight: 100 }
+          ],
+          targetMuscles: ["하체", "엉덩이"]
+        },
+        {
+          name: "런지",
+          sets: [
+            { reps: 12, weight: 20 }, { reps: 12, weight: 20 }, { reps: 10, weight: 25 }
+          ],
+          targetMuscles: ["하체", "엉덩이"]
+        },
+        {
+          name: "레그 프레스",
+          sets: [
+            { reps: 15, weight: 150 }, { reps: 12, weight: 160 }, { reps: 10, weight: 170 }
+          ],
+          targetMuscles: ["하체"]
+        }
+      ],
+      duration: 50,
+      difficulty: 'hard' as const,
+      fatigue: 8
+    },
+    {
+      date: "2024-01-11",
+      exercises: [
+        {
+          name: "버피",
+          sets: [
+            { reps: 10, weight: 0 }, { reps: 8, weight: 0 }, { reps: 6, weight: 0 }
+          ],
+          targetMuscles: ["전신"]
+        },
+        {
+          name: "마운틴 클라이머",
+          sets: [
+            { reps: 30, weight: 0 }, { reps: 25, weight: 0 }, { reps: 20, weight: 0 }
+          ],
+          targetMuscles: ["전신"]
+        },
+        {
+          name: "점핑잭",
+          sets: [
+            { reps: 30, weight: 0 }, { reps: 30, weight: 0 }, { reps: 25, weight: 0 }
+          ],
+          targetMuscles: ["전신"]
+        }
+      ],
+      duration: 30,
+      difficulty: 'moderate' as const,
+      fatigue: 5
+    },
+    {
+      date: "2024-01-09",
+      exercises: [
+        {
+          name: "풀업",
+          sets: [
+            { reps: 8, weight: 0 }, { reps: 6, weight: 0 }, { reps: 4, weight: 0 }
+          ],
+          targetMuscles: ["등", "이두"]
+        },
+        {
+          name: "바벨 로우",
+          sets: [
+            { reps: 12, weight: 50 }, { reps: 10, weight: 55 }, { reps: 8, weight: 60 }
+          ],
+          targetMuscles: ["등"]
+        },
+        {
+          name: "바이셉 컬",
+          sets: [
+            { reps: 15, weight: 12 }, { reps: 12, weight: 15 }, { reps: 10, weight: 15 }
+          ],
+          targetMuscles: ["이두"]
+        }
+      ],
+      duration: 40,
+      difficulty: 'moderate' as const,
+      fatigue: 6
+    },
+    {
+      date: "2024-01-07",
+      exercises: [
+        {
+          name: "인클라인 벤치프레스",
+          sets: [
+            { reps: 10, weight: 45 }, { reps: 8, weight: 50 }, { reps: 6, weight: 55 }
+          ],
+          targetMuscles: ["가슴", "어깨"]
+        },
+        {
+          name: "딥스",
+          sets: [
+            { reps: 12, weight: 0 }, { reps: 10, weight: 0 }, { reps: 8, weight: 0 }
+          ],
+          targetMuscles: ["가슴", "삼두"]
+        },
+        {
+          name: "오버헤드 프레스",
+          sets: [
+            { reps: 10, weight: 30 }, { reps: 8, weight: 32 }, { reps: 6, weight: 35 }
+          ],
+          targetMuscles: ["어깨", "삼두"]
+        }
+      ],
+      duration: 35,
+      difficulty: 'easy' as const,
+      fatigue: 4
+    }
+  ];
+
   const workoutHistory = [
     {
       id: 1,
@@ -103,6 +254,32 @@ const Records = () => {
         { name: "버피", sets: 3, reps: "10, 8, 6", weight: "체중" },
         { name: "마운틴 클라이머", sets: 3, reps: "30, 25, 20", weight: "체중" },
         { name: "점핑잭", sets: 3, reps: "30, 30, 25", weight: "체중" },
+      ]
+    },
+    {
+      id: 4,
+      date: "2024-01-09",
+      routine: "등과 이두 운동",
+      trainer: "박성호",
+      duration: 40,
+      bodyParts: ["등", "이두"],
+      exercises: [
+        { name: "풀업", sets: 3, reps: "8, 6, 4", weight: "체중" },
+        { name: "바벨 로우", sets: 3, reps: "12, 10, 8", weight: "50, 55, 60" },
+        { name: "바이셉 컬", sets: 3, reps: "15, 12, 10", weight: "12, 15, 15" },
+      ]
+    },
+    {
+      id: 5,
+      date: "2024-01-07",
+      routine: "상체 보조 운동",
+      trainer: "김준수",
+      duration: 35,
+      bodyParts: ["가슴", "삼두"],
+      exercises: [
+        { name: "인클라인 벤치프레스", sets: 3, reps: "10, 8, 6", weight: "45, 50, 55" },
+        { name: "딥스", sets: 3, reps: "12, 10, 8", weight: "체중" },
+        { name: "오버헤드 프레스", sets: 3, reps: "10, 8, 6", weight: "30, 32, 35" },
       ]
     }
   ];
@@ -358,17 +535,7 @@ const Records = () => {
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>운동 분석</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-8">
-                <p className="text-gray-500">운동 분석 차트가 여기에 표시됩니다.</p>
-                <p className="text-sm text-gray-400 mt-2">더 많은 데이터가 쌓이면 상세한 분석을 제공합니다.</p>
-              </div>
-            </CardContent>
-          </Card>
+          <AIRoutineAnalysis workoutHistory={workoutDataForAnalysis} />
         </TabsContent>
       </Tabs>
     </div>
